@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import uuid from "react-uuid";
+import { Input } from "./components/Input";
+import { TodoList } from "./components/TodoList";
 
 function App() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-
   const [todos, setTodos] = useState([
     {
       id: uuid(),
@@ -48,137 +47,12 @@ function App() {
           padding: "10px",
         }}
       >
-        <div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              const newTodo = {
-                id: uuid(),
-                title: title,
-                content: content,
-                isDone: false,
-              };
-              setTodos([...todos, newTodo]);
-            }}
-          >
-            <input
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-            />
-            <input
-              value={content}
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
-            />
-            <button type="submit">입력</button>
-          </form>
-        </div>
+        <Input todos={todos} setTodos={setTodos} />
         <div>
           <h1>리스트 영역</h1>
 
-          <div>
-            <h2>할 일 목록</h2>
-            {todos
-              .filter((todo) => todo.isDone === false)
-              .map((todo) => {
-                return (
-                  <div
-                    key={todo.id}
-                    style={{
-                      border: "1px solid black",
-                      margin: "10px",
-                      paddingLeft: "10px",
-                      paddingBottom: "10px",
-                    }}
-                  >
-                    <p>{todo.id}</p>
-                    <h3>{todo.title}</h3>
-                    <p>{todo.content}</p>
-                    <p>완료여부 : {todo.isDone.toString()}</p>
-                    <button
-                      onClick={() => {
-                        const newTodos = todos.map((item) => {
-                          if (item.id === todo.id) {
-                            return {
-                              ...item,
-                              isDone: !item.isDone,
-                            };
-                          } else {
-                            return item;
-                          }
-                        });
-                        setTodos(newTodos);
-                      }}
-                    >
-                      완료
-                    </button>
-                    <button
-                      onClick={() => {
-                        const deletedTodos = todos.filter((item) => {
-                          return item.id !== todo.id;
-                        });
-                        setTodos(deletedTodos);
-                      }}
-                    >
-                      삭제
-                    </button>
-                  </div>
-                );
-              })}
-          </div>
-          <div>
-            <h2>완료된 목록</h2>
-            {todos
-              .filter((todo) => todo.isDone === true)
-              .map((todo) => {
-                return (
-                  <div
-                    key={todo.id}
-                    style={{
-                      border: "1px solid black",
-                      margin: "10px",
-                      paddingLeft: "10px",
-                      paddingBottom: "10px",
-                    }}
-                  >
-                    <p>{todo.id}</p>
-                    <h3>{todo.title}</h3>
-                    <p>{todo.content}</p>
-                    <p>완료여부 : {todo.isDone.toString()}</p>
-                    <button
-                      onClick={() => {
-                        const newTodos = todos.map((item) => {
-                          if (item.id === todo.id) {
-                            return {
-                              ...item,
-                              isDone: !item.isDone,
-                            };
-                          } else {
-                            return item;
-                          }
-                        });
-                        setTodos(newTodos);
-                      }}
-                    >
-                      완료취소
-                    </button>
-                    <button
-                      onClick={() => {
-                        const deletedTodos = todos.filter((item) => {
-                          return item.id !== todo.id;
-                        });
-                        setTodos(deletedTodos);
-                      }}
-                    >
-                      삭제
-                    </button>
-                  </div>
-                );
-              })}
-          </div>
+          <TodoList todos={todos} setTodos={setTodos} listIsDone={false} />
+          <TodoList todos={todos} setTodos={setTodos} listIsDone={true} />
         </div>
       </main>
       <footer
